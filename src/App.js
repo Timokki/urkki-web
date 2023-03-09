@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react'
+import './App.css'
+import DateHeader from './dateHeader'
+import itemService from './services/items'
+import outputService from './services/outputs'
+import OutputTable from './outputTable'
 
 function App() {
+  const [dayOutputs, setDayOutput] = useState([])
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    itemService
+      .getAll()
+      .then(initialItems => {
+        setItems(initialItems)
+      })
+
+    outputService
+      .getAll()
+      .then(initialItems => {
+        setDayOutput(initialItems)
+      }) 
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>URKKI APPI</h1>
+      <DateHeader />
+      <div>Päivän output: 3,76h</div>
+      <OutputTable outputs={dayOutputs} items={items}/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
